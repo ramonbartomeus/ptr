@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-950 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo de Teaming Recíproco - El Legado que se Transforma en Vida!</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons for Beautiful UI -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .mono-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* Custom scrollbar for modern dark look aligned with Teaming colors */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00A2E8;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0082b8;
+        }
+        /* Ensure table header tooltips are never clipped */
+        .table-container {
+            overflow: visible !important;
+        }
+        .group:hover .group-hover\:block {
+            display: block !important;
+            z-index: 50 !important;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col overflow-hidden bg-slate-950">
+
+    <!-- Password Security Gate -->
+    <div id="passwordGate" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-6">
+        <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-sky-500/10 text-sky-400 mb-6 border border-sky-500/20">
+                <i class="fa-solid fa-lock text-2xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-2">Acceso Restringido</h2>
+            <p class="text-slate-400 text-sm mb-6">Este prototipo de simulación del PTR está reservado para el Patronato de la Fundación Teaming.</p>
+            
+            <div class="mb-4">
+                <input type="password" id="gatePassword" placeholder="Introduce el código de acceso" 
+                       class="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-center text-white focus:outline-none focus:border-sky-500 font-mono">
+            </div>
+            <button onclick="unlockSimulator()" class="w-full py-3 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-xl transition duration-200">
+                Verificar y Entrar
+            </button>
+            <p id="passwordError" class="text-red-400 text-xs mt-3 hidden">Código incorrecto. Prueba con 'teaming2026' o 'ptr'.</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-slate-900 border-b border-slate-800 shrink-0 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-gradient-to-tr from-sky-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-sky-500/20">
+                <i class="fa-solid fa-hand-holding-dollar text-white text-lg"></i>
+            </div>
+            <div>
+                <h1 class="text-base sm:text-lg font-bold tracking-tight text-white flex flex-wrap items-center gap-2">
+                    Protocolo de Teaming Recíproco <span class="text-xs px-2 py-0.5 bg-sky-500/20 text-sky-300 rounded-full border border-sky-500/30">¡El Legado que se Transforma en Vida!</span>
+                </h1>
+                <p class="text-xs text-slate-400">Simulador oficial de legados y distribución automatizada en la plataforma Teaming.net</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-4 shrink-0">
+            <button onclick="togglePasswordGate()" class="text-xs px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition duration-150 flex items-center gap-2">
+                <i class="fa-solid fa-key text-sky-400"></i> <span id="lockBtnText">Proteger Simulador</span>
+            </button>
+            <span class="text-xs text-slate-500">Versión 4.5</span>
+        </div>
+    </header>
+
+    <!-- Workspace -->
+    <div class="grow flex flex-col lg:flex-row overflow-hidden">
+
+        <!-- LEFT SIDEBAR: Parameter Entry (Scrollable, optimized to 380px) -->
+        <aside class="w-full lg:w-[380px] bg-slate-900/50 border-r border-slate-800 flex flex-col overflow-y-auto shrink-0 p-5 space-y-5">
+            
+            <!-- Global Parameters Card -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-sm space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                    <h3 class="font-semibold text-white flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-sliders text-sky-400"></i> Parámetros Globales
+                    </h3>
+                    <span class="text-xs text-slate-400 font-mono">Bases</span>
+                </div>
+
+                <!-- Year 1 Input: Groups -->
+                <div class="space-y-1">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs text-slate-300 flex items-center gap-1.5">
+                            Grupos Iniciales (Año 1)
+                            <div class="group relative inline-block">
+                                <i class="fa-solid fa-circle-info text-slate-500 text-2xs cursor-pointer"></i>
+                                <span class="hidden group-hover:block absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 bg-slate-950 border border-slate-800 text-slate-300 text-3xs p-2 rounded shadow-lg z-20 leading-normal">
+                                    Grupos activados con al menos 2 Teamers con Renta en los primeros 12 meses.
+                                </span>
+                            </div>
+                        </label>
+                        <span id="g1_val" class="text-xs font-mono font-bold text-sky-400">4</span>
+                    </div>
+                    <input type="range" id="param_g1" min="1" max="50" value="4" oninput="triggerRecalculate()"
+                           class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                </div>
+
+                <!-- Year 1 Input: Teamers -->
+                <div class="space-y-1">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs text-slate-300 flex items-center gap-1.5">
+                            Teamers Iniciales (Año 1)
+                            <div class="group relative inline-block">
+                                <i class="fa-solid fa-circle-info text-slate-500 text-2xs cursor-pointer"></i>
+                                <span class="hidden group-hover:block absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 bg-slate-950 border border-slate-800 text-slate-300 text-3xs p-2 rounded shadow-lg z-20 leading-normal">
+                                    Teamers que han firmado el legado en los primeros 12 meses.
+                                </span>
+                            </div>
+                        </label>
+                        <span id="t1_val" class="text-xs font-mono font-bold text-sky-400">8</span>
+                    </div>
+                    <input type="range" id="param_t1" min="2" max="100" value="8" oninput="triggerRecalculate()"
+                           class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                </div>
+
+                <!-- Year 10 Input: Enrolled Groups % (Targeting 12.632 groups) -->
+                <div class="space-y-1">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs text-slate-300 flex items-center gap-1.5">
+                            % Grupos Totales (Año 10)
+                            <div class="group relative inline-block">
+                                <i class="fa-solid fa-circle-info text-slate-500 text-2xs cursor-pointer"></i>
+                                <span class="hidden group-hover:block absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 bg-slate-950 border border-slate-800 text-slate-300 text-3xs p-2 rounded shadow-lg z-20 leading-normal">
+                                    % de los 12.632 Grupos totales de Teaming.net que participan (Base: 3.0% = 379 grupos).
+                                </span>
+                            </div>
+                        </label>
+                        <span id="g10_val" class="text-xs font-mono font-bold text-cyan-400">3.0%</span>
+                    </div>
+                    <input type="range" id="param_g10" min="0.1" max="15" step="0.01" value="3.0" oninput="triggerRecalculate()"
+                           class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-500">
+                </div>
+
+                <!-- Year 10 Input: Enrolled Teamers % (Targeting 756.507 teamers) -->
+                <div class="space-y-1">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs text-slate-300 flex items-center gap-1.5">
+                            % Teamers Totales (Año 10)
+                            <div class="group relative inline-block">
+                                <i class="fa-solid fa-circle-info text-slate-500 text-2xs cursor-pointer"></i>
+                                <span class="hidden group-hover:block absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 bg-slate-950 border border-slate-800 text-slate-300 text-3xs p-2 rounded shadow-lg z-20 leading-normal">
+                                    % de los 756.507 Teamers que se adhieren en 10 años (Base: 2.91% = 22.000 Teamers).
+                                </span>
+                            </div>
+                        </label>
+                        <span id="t10_val" class="text-xs font-mono font-bold text-cyan-400">2.91%</span>
+                    </div>
+                    <input type="range" id="param_t10" min="0.1" max="15" step="0.01" value="2.91" oninput="triggerRecalculate()"
+                           class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-500">
+                </div>
+            </div>
+
+            <!-- Annual Adjustable Parameters Card -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-sm space-y-3.5">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                    <h3 class="font-semibold text-white flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-calendar-days text-sky-400"></i> Parámetros por Año
+                    </h3>
+                    <button onclick="restoreDefaults()" class="text-xs text-sky-400 hover:text-sky-300 underline">
+                        Restaurar
+                    </button>
+                </div>
+                
+                <p class="text-3xs text-slate-400 leading-relaxed">
+                    Personaliza el **Saldo Medio** y la **Mortalidad** anual para evaluar el impacto de las fluctuaciones demográficas y herencias.
+                </p>
+
+                <!-- Yearly Grid Inputs -->
+                <div class="table-container">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="text-slate-400 border-b border-slate-800/80">
+                                <th class="py-1.5 pr-2 text-2xs">Año</th>
+                                <th class="py-1.5 px-2 text-2xs">
+                                    Saldo Medio (€)
+                                    <div class="group relative inline-block">
+                                        <i class="fa-solid fa-circle-info text-slate-500 text-3xs cursor-pointer"></i>
+                                        <span class="hidden group-hover:block absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-44 bg-slate-950 border border-slate-800 text-slate-300 text-3xs p-2 rounded shadow-lg z-30 font-normal leading-normal whitespace-normal">
+                                            Importe promedio de los legados liquidados en el año concreto.
+                                        </span>
+                                    </div>
+                                </th>
+                                <th class="py-1.5 pl-2 text-2xs">
+                                    Mortalidad (%)
+                                    <div class="group relative inline-block">
+                                        <i class="fa-solid fa-circle-info text-slate-500 text-3xs cursor-pointer"></i>
+                                        <span class="hidden group-hover:block absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-44 bg-slate-950 border border-slate-800 text-slate-300 text-3xs p-2 rounded shadow-lg z-30 font-normal leading-normal whitespace-normal">
+                                            Porcentaje de defunciones anuales sobre el volumen total de legados comprometidos.
+                                        </span>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/50" id="yearlyInputBody">
+                            <!-- JS will inject 10 rows here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Mathematical Logic / Blueprint Info -->
+            <div class="bg-slate-900/60 border border-slate-800/60 rounded-xl p-3.5 text-xs text-slate-400 space-y-2.5">
+                <h4 class="font-semibold text-slate-200 flex items-center gap-1.5 text-xs">
+                    <i class="fa-solid fa-graduation-cap text-sky-400"></i> Lógica del Motor de Reparto (PTR)
+                </h4>
+                <p class="text-3xs leading-relaxed">
+                    Al fallecer un Teamer Recíproco, su **saldo sobrante** es recuperado por la Fundación Teaming y distribuido automáticamente de la siguiente forma:
+                </p>
+                <ul class="space-y-1 text-3xs pl-2 border-l border-sky-500/50">
+                    <li class="flex justify-between">
+                        <span><strong class="text-slate-300">50% Renta Recíproca:</strong> Reparto equitativo entre Teamers activos</span>
+                        <span class="text-sky-400 font-bold">50%</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span><strong class="text-slate-300">46% Causa de Confianza:</strong> Al Grupo Teaming elegido</span>
+                        <span class="text-cyan-400 font-bold">46%</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span><strong class="text-slate-300">4% Teamers 4 Teaming:</strong> Para gestión y soporte</span>
+                        <span class="text-amber-400 font-bold">4%</span>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- RIGHT PANEL: Charts & Dashboard Display -->
+        <main class="grow flex flex-col overflow-hidden bg-slate-950">
+            
+            <!-- Dashboard Top Summary Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 border-b border-slate-800 divide-x divide-y md:divide-y-0 divide-slate-800 bg-slate-900/10">
+                
+                <!-- KPI 1: Active Teamers -->
+                <div class="p-5">
+                    <p class="text-3xs text-slate-400 font-semibold uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span> Teamers Registrados (Año 10)
+                    </p>
+                    <h3 id="kpi_teamers" class="text-xl sm:text-2xl font-bold text-white tracking-tight font-mono">0</h3>
+                    <p class="text-3xs text-slate-500 mt-0.5 flex items-center gap-1">
+                        <i class="fa-solid fa-arrow-trend-up text-sky-400"></i> Extrapolación del boca-oreja
+                    </p>
+                </div>
+
+                <!-- KPI 2: Active Groups -->
+                <div class="p-5">
+                    <p class="text-3xs text-slate-400 font-semibold uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span> Grupos Incorporados (Año 10)
+                    </p>
+                    <h3 id="kpi_groups" class="text-xl sm:text-2xl font-bold text-white tracking-tight font-mono">0</h3>
+                    <p class="text-3xs text-slate-500 mt-0.5 flex items-center gap-1">
+                        <i class="fa-solid fa-arrow-trend-up text-cyan-400"></i> Condición de 2 Teamers activa
+                    </p>
+                </div>
+
+                <!-- KPI 3: Committed Capital -->
+                <div class="p-5">
+                    <p class="text-3xs text-slate-400 font-semibold uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-300"></span> Capital Futuro comprometido
+                    </p>
+                    <h3 id="kpi_capital" class="text-xl sm:text-2xl font-bold text-white tracking-tight font-mono">0 €</h3>
+                    <p class="text-3xs text-slate-500 mt-0.5 flex items-center gap-1">
+                        <i class="fa-solid fa-shield-halved text-sky-300"></i> Testamentos activos y firmados
+                    </p>
+                </div>
+
+                <!-- KPI 4: Reciprocal Renta -->
+                <div class="p-5">
+                    <p class="text-3xs text-slate-400 font-semibold uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span> Renta Promedio / Teamer
+                    </p>
+                    <h3 id="kpi_renda" class="text-xl sm:text-2xl font-bold text-white tracking-tight font-mono">0 € / año</h3>
+                    <p class="text-3xs text-slate-500 mt-0.5 flex items-center gap-1">
+                        <i class="fa-solid fa-envelope-open-text text-sky-400"></i> Distribución automática
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Chart Workspace -->
+            <div class="grow flex flex-col p-5 min-h-0 relative">
+                
+                <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-3 mb-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white">Curvas de Crecimiento y Simulación PTR (10 Años)</h2>
+                        <p class="text-xs text-slate-400">Usa la leyenda interactiva para filtrar, aislar y ver las escalas individuales de cada serie.</p>
+                    </div>
+                    
+                    <!-- Quick Presets -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-2xs text-slate-400">Preajustes de Crecimiento:</span>
+                        <button onclick="setScenario(3)" class="text-3xs px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 transition duration-150">
+                            3% Base Social (22.695 Teamers)
+                        </button>
+                        <button onclick="setScenario(5)" class="text-3xs px-2 py-1 bg-sky-600/20 hover:bg-sky-600/30 text-sky-300 rounded border border-sky-500/30 transition duration-150">
+                            5% Base Social (37.825 Teamers)
+                        </button>
+                        <button onclick="setScenario(10)" class="text-3xs px-2 py-1 bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 rounded border border-cyan-500/30 transition duration-150">
+                            10% Base Social (75.650 Teamers)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Custom Dashboard Legend with Custom Design Toggles -->
+                <div class="flex flex-wrap gap-2 mb-3 p-2.5 bg-slate-900/30 border border-slate-800/80 rounded-lg" id="customLegendContainer">
+                    <!-- Checkboxes will be programmatically synchronized with Chart.js display -->
+                </div>
+
+                <!-- Chart Wrapper with strict responsive viewport limits -->
+                <div class="grow relative min-h-0">
+                    <canvas id="mainDashboardChart" class="w-full h-full"></canvas>
+                </div>
+
+            </div>
+
+            <!-- Footnotes & Detailed Methodology Panel -->
+            <footer class="bg-slate-900 border-t border-slate-800 shrink-0 p-4">
+                <div class="max-w-4xl mx-auto">
+                    <h4 class="text-2xs font-bold text-white mb-1.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-calculator text-sky-400"></i> Notas y Fórmulas del Simulador
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-3xs text-slate-400 leading-relaxed">
+                        <div>
+                            <p class="mb-0.5"><strong class="text-slate-300 font-medium">1. Extrapolación S-Curve:</strong> El crecimiento sigue una curva logística de aceleración que simula el boca-oreja inicial antes de explotar exponencialmente a partir del año 5.</p>
+                            <p><strong class="text-slate-300 font-medium">2. Renta Recíproca / Teamer:</strong> Se calcula dividiendo el <code class="mono-font text-sky-300">Fondo Común (50%)</code> de los legados liquidados en el año entre los <code class="mono-font text-sky-300">Teamers Vivos</code> de ese mismo ejercicio.</p>
+                        </div>
+                        <div>
+                            <p class="mb-0.5"><strong class="text-slate-300 font-medium">3. Invitaciones Personales Generadas:</strong> Cada vez que se procesa un legado, toda la red se activa. La fórmula de invitaciones anuales es <code class="mono-font text-sky-300">Decesos × (Teamers + Grupos)</code>.</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- Core Application Logic Script -->
+    <script>
+        // Teaming.net Real Base Social Boundaries
+        const BASE_GROUPS = 12632;
+        const BASE_TEAMERS = 756507;
+
+        // Custom defaulted matrix as requested by user
+        const DEFAULT_SALDOS = [20000, 20000, 5000, 35000, 20000, 20000, 20000, 20000, 20000, 20000];
+        const DEFAULT_MORTALIDADES = [4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 2.0, 6.0, 4.0, 4.0];
+
+        // State Variables
+        let saldosAnuales = [...DEFAULT_SALDOS];
+        let mortalidadesAnuales = [...DEFAULT_MORTALIDADES];
+        let chartInstance = null;
+        let isProtected = false;
+
+        // Custom Labels & Themes matching Teaming's palette
+        const CURVE_SPECS = [
+            { label: "1. Teamers Acumulados", color: "#00A2E8", icon: "fa-users" },
+            { label: "2. Grupos Acumulados", color: "#00C197", icon: "fa-folder-tree" },
+            { label: "3. € Renta Recíproca / Teamer", color: "#38bdf8", icon: "fa-envelope-open-text" },
+            { label: "4. de Número de Decesos", color: "#0ea5e9", icon: "fa-user-minus" },
+            { label: "5. € Recaudados para Teamers 4 Teaming", color: "#f59e0b", icon: "fa-shield-halved" },
+            { label: "6. Capital Comprometido (€)", color: "#0284c7", icon: "fa-file-invoice-dollar" },
+            { label: "7. Invitaciones Personales Generadas", color: "#ec4899", icon: "fa-share-nodes" },
+            { label: "8. € Recaudados por Año", color: "#a855f7", icon: "fa-sack-dollar" }
+        ];
+
+        // Active Visibility of Each Series
+        let activeSeriesVisibility = [true, true, true, true, true, true, true, true];
+
+        // On Load initialization
+        window.onload = function() {
+            renderTableInputs();
+            calculateAndDraw();
+        };
+
+        // Render the editable yearly input grid with descriptive tooltips
+        function renderTableInputs() {
+            const tbody = document.getElementById("yearlyInputBody");
+            tbody.innerHTML = "";
+            for (let year = 1; year <= 10; year++) {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-slate-800/20 transition duration-100";
+                tr.innerHTML = `
+                    <td class="py-1.5 pr-2 font-mono font-semibold text-slate-400">Año ${year}</td>
+                    <td class="py-1.5 px-2">
+                        <div class="relative flex items-center">
+                            <span class="absolute left-2.5 text-slate-500 font-mono text-3xs">€</span>
+                            <input type="number" id="saldo_y${year}" value="${saldosAnuales[year-1]}" onchange="updateAnnualValue('saldo', ${year}, this.value)" 
+                                   class="w-full pl-5 pr-1.5 py-0.5 bg-slate-950 border border-slate-800 focus:border-sky-500 focus:outline-none rounded font-mono text-3xs text-right text-sky-400">
+                        </div>
+                    </td>
+                    <td class="py-1.5 pl-2">
+                        <div class="relative flex items-center">
+                            <input type="number" step="0.1" id="mort_y${year}" value="${mortalidadesAnuales[year-1]}" onchange="updateAnnualValue('mortity', ${year}, this.value)" 
+                                   class="w-full pl-1.5 pr-5 py-0.5 bg-slate-950 border border-slate-800 focus:border-sky-500 focus:outline-none rounded font-mono text-3xs text-right text-cyan-400">
+                            <span class="absolute right-2.5 text-slate-500 font-mono text-3xs">%</span>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+
+        // Update single cells in annual array
+        function updateAnnualValue(type, year, value) {
+            const numericVal = parseFloat(value) || 0;
+            if (type === 'saldo') {
+                saldosAnuales[year-1] = numericVal;
+            } else {
+                mortalidadesAnuales[year-1] = numericVal;
+            }
+            calculateAndDraw();
+        }
+
+        // Restore Defaults
+        function restoreDefaults() {
+            saldosAnuales = [...DEFAULT_SALDOS];
+            mortalidadesAnuales = [...DEFAULT_MORTALIDADES];
+            renderTableInputs();
+            calculateAndDraw();
+        }
+
+        // Apply pre-configured scenario parameters based on new Teaming base social metrics
+        function setScenario(pct) {
+            if (pct === 3) {
+                // 3% of Base Social
+                const targetGroupsPct = (379 / BASE_GROUPS) * 100; // ~3.0%
+                const targetTeamersPct = (22695 / BASE_TEAMERS) * 100; // ~3.0%
+                document.getElementById("param_g10").value = targetGroupsPct.toFixed(3);
+                document.getElementById("param_t10").value = targetTeamersPct.toFixed(3);
+            } else if (pct === 5) {
+                // 5% of Base Social
+                const targetGroupsPct = (632 / BASE_GROUPS) * 100; // ~5.0%
+                const targetTeamersPct = (37825 / BASE_TEAMERS) * 100; // ~5.0%
+                document.getElementById("param_g10").value = targetGroupsPct.toFixed(3);
+                document.getElementById("param_t10").value = targetTeamersPct.toFixed(3);
+            } else if (pct === 10) {
+                // 10% of Base Social
+                const targetGroupsPct = (1263 / BASE_GROUPS) * 100; // ~10.0%
+                const targetTeamersPct = (75650 / BASE_TEAMERS) * 100; // ~10.0%
+                document.getElementById("param_g10").value = targetGroupsPct.toFixed(3);
+                document.getElementById("param_t10").value = targetTeamersPct.toFixed(3);
+            }
+            calculateAndDraw();
+        }
+
+        // Trigger safe recalibration
+        function triggerRecalculate() {
+            calculateAndDraw();
+        }
+
+        // Execution and Calculation Logic
+        function calculateAndDraw() {
+            // Get boundaries from visual controllers
+            const g1 = parseInt(document.getElementById("param_g1").value);
+            const t1 = parseInt(document.getElementById("param_t1").value);
+            const pctG10 = parseFloat(document.getElementById("param_g10").value);
+            const pctT10 = parseFloat(document.getElementById("param_t10").value);
+
+            // Update visible indicators
+            document.getElementById("g1_val").innerText = g1;
+            document.getElementById("t1_val").innerText = t1;
+            document.getElementById("g10_val").innerText = pctG10.toFixed(2) + "%";
+            document.getElementById("t10_val").innerText = pctT10.toFixed(2) + "%";
+
+            // Recalculating totals with updated Base Social
+            const t10 = Math.round(BASE_TEAMERS * (pctT10 / 100));
+            const g10 = Math.round(BASE_GROUPS * (pctG10 / 100));
+
+            // Projections initialization
+            let years = Array.from({length: 10}, (_, i) => `Año ${i+1}`);
+            let teamersProjections = [];
+            let groupsProjections = [];
+            let rentaProjections = [];
+            let decesosProjections = []; // Curve 4
+            let t4tProjections = [];
+            let committedProjections = [];
+            let invitationsProjections = [];
+            let recaudadoProjections = []; // Curve 8
+
+            // Exponential organic curve coefficient to represent mouth-to-ear speed
+            const pTeamer = 2.4; 
+            const pGroup = 2.0;
+
+            // Generate growth year by year
+            for (let t = 0; t < 10; t++) {
+                const step = t / 9;
+
+                // Smooth S-Curve for Teamers & Groups
+                const curT = Math.round(t1 + (t10 - t1) * Math.pow(step, pTeamer));
+                const curG = Math.round(g1 + (g10 - g1) * Math.pow(step, pGroup));
+
+                teamersProjections.push(curT);
+                groupsProjections.push(curG);
+
+                // Yearly variables lookup
+                const currentSaldo = saldosAnuales[t];
+                const currentMortalidad = mortalidadesAnuales[t];
+
+                // Actuarial death calculations (Adjusted to strict rounded integers!)
+                const realizedLegacies = Math.round(curT * (currentMortalidad / 100));
+                const realizedWealth = realizedLegacies * currentSaldo;
+
+                // 3: €/Teamer Renta Recíproca (50% distributed to alive teamers)
+                const networkPortion = realizedWealth * 0.50;
+                const livingTeamers = curT - realizedLegacies;
+                const rentaPerTeamer = livingTeamers > 0 ? (networkPortion / livingTeamers) : 0;
+                rentaProjections.push(Math.round(rentaPerTeamer));
+
+                // 4: de Número de Decesos
+                decesosProjections.push(realizedLegacies);
+
+                // 5: € received by Teamers 4 Teaming (4% of total realized wealth)
+                const t4tPortion = realizedWealth * 0.04;
+                t4tProjections.push(Math.round(t4tPortion));
+
+                // 6: Accumulated committed capital in testaments
+                const currentCommitted = curT * currentSaldo;
+                committedProjections.push(currentCommitted);
+
+                // 7: Personal invitations generated: Legacies × (Teamers + Groups)
+                const invitations = Math.round(realizedLegacies * (curT + curG));
+                invitationsProjections.push(invitations);
+
+                // 8: € Recaudados por Año (Total realized wealth)
+                recaudadoProjections.push(realizedWealth);
+            }
+
+            // Sync KPIs to dashboard panel for Year 10 results
+            document.getElementById("kpi_teamers").innerText = teamersProjections[9].toLocaleString("es-ES");
+            document.getElementById("kpi_groups").innerText = groupsProjections[9].toLocaleString("es-ES");
+            document.getElementById("kpi_capital").innerText = committedProjections[9].toLocaleString("es-ES", {style: 'currency', currency: 'EUR', maximumFractionDigits: 0});
+            document.getElementById("kpi_renda").innerText = rentaProjections[9].toLocaleString("es-ES", {style: 'currency', currency: 'EUR', maximumFractionDigits: 0}) + " / año";
+
+            // Render/Refresh UI with new figures
+            drawChart(years, [
+                teamersProjections,
+                groupsProjections,
+                rentaProjections,
+                decesosProjections,
+                t4tProjections,
+                committedProjections,
+                invitationsProjections,
+                recaudadoProjections
+            ]);
+        }
+
+        // Sync custom legend UI checkboxes
+        function updateLegendUI() {
+            const legendContainer = document.getElementById("customLegendContainer");
+            legendContainer.innerHTML = "";
+
+            CURVE_SPECS.forEach((spec, index) => {
+                const isChecked = activeSeriesVisibility[index];
+                const btn = document.createElement("button");
+                btn.onclick = () => toggleSeries(index);
+                btn.className = `inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs transition duration-150 ${
+                    isChecked 
+                        ? 'bg-slate-800 border-sky-500/50 text-white' 
+                        : 'bg-slate-900/40 border-slate-800 text-slate-500'
+                }`;
+                
+                btn.innerHTML = `
+                    <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${spec.color}"></span>
+                    <i class="fa-solid ${spec.icon} text-3xs"></i>
+                    <span>${spec.label}</span>
+                `;
+                legendContainer.appendChild(btn);
+            });
+        }
+
+        // Toggle visibility of specific datasets and adjust scaling scales dynamically
+        function toggleSeries(index) {
+            activeSeriesVisibility[index] = !activeSeriesVisibility[index];
+            updateLegendUI();
+            
+            if (chartInstance) {
+                const meta = chartInstance.getDatasetMeta(index);
+                meta.hidden = !activeSeriesVisibility[index];
+                updateScalesVisibility();
+            }
+        }
+
+        // Dynamically hide/show scales depending on whether visible datasets are using them
+        function updateScalesVisibility() {
+            if (!chartInstance) return;
+
+            const scalesNeeded = {
+                y_count: false,
+                y_money: false,
+                y_money_thousands: false,
+                y_money_millions: false,
+                y_count_invites: false
+            };
+
+            // Analyze which scales are required by active curves
+            chartInstance.data.datasets.forEach((dataset, i) => {
+                if (activeSeriesVisibility[i]) {
+                    scalesNeeded[dataset.yAxisID] = true;
+                }
+            });
+
+            // Toggle scales visibility to prevent flat squashing or scale collision
+            chartInstance.options.scales.y_count.display = scalesNeeded.y_count;
+            chartInstance.options.scales.y_money.display = scalesNeeded.y_money;
+            chartInstance.options.scales.y_money_thousands.display = scalesNeeded.y_money_thousands;
+            chartInstance.options.scales.y_money_millions.display = scalesNeeded.y_money_millions;
+            chartInstance.options.scales.y_count_invites.display = scalesNeeded.y_count_invites;
+
+            chartInstance.update();
+        }
+
+        // Render Chart using multiple y-axes for flawless multi-scale projection (Units vs Currency vs Count)
+        function drawChart(labels, datasets) {
+            updateLegendUI();
+            const ctx = document.getElementById('mainDashboardChart').getContext('2d');
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: CURVE_SPECS[0].label,
+                            data: datasets[0],
+                            borderColor: CURVE_SPECS[0].color,
+                            backgroundColor: CURVE_SPECS[0].color + '10',
+                            yAxisID: 'y_count',
+                            borderWidth: 3,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.2,
+                            hidden: !activeSeriesVisibility[0]
+                        },
+                        {
+                            label: CURVE_SPECS[1].label,
+                            data: datasets[1],
+                            borderColor: CURVE_SPECS[1].color,
+                            backgroundColor: CURVE_SPECS[1].color + '10',
+                            yAxisID: 'y_count',
+                            borderWidth: 3,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.2,
+                            hidden: !activeSeriesVisibility[1]
+                        },
+                        {
+                            label: CURVE_SPECS[2].label,
+                            data: datasets[2],
+                            borderColor: CURVE_SPECS[2].color,
+                            backgroundColor: CURVE_SPECS[2].color + '10',
+                            yAxisID: 'y_money',
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.2,
+                            hidden: !activeSeriesVisibility[2]
+                        },
+                        {
+                            label: CURVE_SPECS[3].label,
+                            data: datasets[3],
+                            borderColor: CURVE_SPECS[3].color,
+                            backgroundColor: CURVE_SPECS[3].color + '10',
+                            yAxisID: 'y_count',
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.2,
+                            hidden: !activeSeriesVisibility[3]
+                        },
+                        {
+                            label: CURVE_SPECS[4].label,
+                            data: datasets[4],
+                            borderColor: CURVE_SPECS[4].color,
+                            backgroundColor: CURVE_SPECS[4].color + '10',
+                            yAxisID: 'y_money_thousands', // Scaled in thousands of euros as requested
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.2,
+                            hidden: !activeSeriesVisibility[4]
+                        },
+                        {
+                            label: CURVE_SPECS[5].label,
+                            data: datasets[5],
+                            borderColor: CURVE_SPECS[5].color,
+                            backgroundColor: CURVE_SPECS[5].color + '05',
+                            yAxisID: 'y_money_millions', // Scaled in millions of euros as requested
+                            borderWidth: 3,
+                            fill: true,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.2,
+                            hidden: !activeSeriesVisibility[5]
+                        },
+                        {
+                            label: CURVE_SPECS[6].label,
+                            data: datasets[6],
+                            borderColor: CURVE_SPECS[6].color,
+                            backgroundColor: CURVE_SPECS[6].color + '10',
+                            yAxisID: 'y_count_invites',
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.2,
+                            hidden: !activeSeriesVisibility[6]
+                        },
+                        {
+                            label: CURVE_SPECS[7].label,
+                            data: datasets[7],
+                            borderColor: CURVE_SPECS[7].color,
+                            backgroundColor: CURVE_SPECS[7].color + '10',
+                            yAxisID: 'y_money_millions', // Curve 8 recaudados por año sharing millions axis
+                            borderWidth: 2.5,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.2,
+                            hidden: !activeSeriesVisibility[7]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // Using custom styled dashboard legend
+                        },
+                        tooltip: {
+                            backgroundColor: '#0f172a',
+                            titleColor: '#ffffff',
+                            bodyColor: '#cbd5e1',
+                            borderColor: '#334155',
+                            borderWidth: 1,
+                            padding: 12,
+                            boxPadding: 6,
+                            usePointStyle: true,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const yAxisID = context.dataset.yAxisID;
+                                    if (yAxisID === 'y_money_millions') {
+                                        label += (context.raw / 1e6).toFixed(2).toLocaleString('es-ES') + ' M €';
+                                    } else if (yAxisID === 'y_money_thousands') {
+                                        label += (context.raw / 1000).toFixed(1).toLocaleString('es-ES') + ' mil €';
+                                    } else if (yAxisID === 'y_money') {
+                                        label += context.raw.toLocaleString('es-ES') + ' €';
+                                    } else if (yAxisID === 'y_count_invites') {
+                                        label += (context.raw / 1e6).toFixed(2) + ' M';
+                                    } else {
+                                        label += context.raw.toLocaleString('es-ES');
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: '#1e293b'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        },
+                        y_count: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            grid: {
+                                color: '#1e293b'
+                            },
+                            ticks: {
+                                color: '#00A2E8',
+                                callback: value => value.toLocaleString('es-ES')
+                            },
+                            title: {
+                                display: true,
+                                text: 'Unidades (Teamers, Grupos, Decesos)',
+                                color: '#00A2E8',
+                                font: { size: 10 }
+                            }
+                        },
+                        y_money: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            ticks: {
+                                color: '#38bdf8',
+                                callback: value => value.toLocaleString('es-ES') + ' €'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Renta Individual / Año (€)',
+                                color: '#38bdf8',
+                                font: { size: 10 }
+                            }
+                        },
+                        y_money_thousands: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            ticks: {
+                                color: '#f59e0b',
+                                callback: value => (value / 1000).toLocaleString('es-ES') + ' mil €'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Recaudado T4T (miles de €)',
+                                color: '#f59e0b',
+                                font: { size: 10 }
+                            }
+                        },
+                        y_money_millions: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            ticks: {
+                                color: '#0284c7',
+                                callback: value => (value / 1e6).toFixed(1).toLocaleString('es-ES') + ' M €'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Capital / Recaudado (Millones de €)',
+                                color: '#0284c7',
+                                font: { size: 10 }
+                            }
+                        },
+                        y_count_invites: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            ticks: {
+                                color: '#ec4899',
+                                callback: value => (value / 1e6).toFixed(1) + ' M'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Invitaciones (Millones)',
+                                color: '#ec4899',
+                                font: { size: 10 }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Initial alignment of scales based on visible datasets on load
+            updateScalesVisibility();
+        }
+
+        // Password Security Mode (Simulated for presentation preview)
+        function togglePasswordGate() {
+            isProtected = !isProtected;
+            const btnText = document.getElementById("lockBtnText");
+            if (isProtected) {
+                btnText.innerText = "Desbloquear Simulador";
+                document.getElementById("passwordGate").classList.remove("hidden");
+            } else {
+                btnText.innerText = "Proteger Simulador";
+                document.getElementById("passwordGate").classList.add("hidden");
+            }
+        }
+
+        function unlockSimulator() {
+            const pass = document.getElementById("gatePassword").value;
+            if (pass.toLowerCase() === "teaming2026" || pass === "ptr") {
+                document.getElementById("passwordGate").classList.add("hidden");
+                document.getElementById("passwordError").classList.add("hidden");
+            } else {
+                document.getElementById("passwordError").classList.remove("hidden");
+            }
+        }
+    </script>
+</body>
+</html>
